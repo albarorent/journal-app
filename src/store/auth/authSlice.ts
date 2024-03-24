@@ -11,7 +11,7 @@ export interface CounterState {
 }
 
 const initialState: CounterState = {
-  status: "not-authenticated",
+  status: "checking",
   uid: null,
   email: null,
   displayName: null,

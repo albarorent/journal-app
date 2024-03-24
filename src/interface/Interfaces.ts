@@ -10,4 +10,13 @@ export interface FormValidationState {
 export interface FormState {
   [key: string]: string;
 }
- 
+
+export interface FormCheckedValues {
+  [key: string]: string | null;
+}
+
+export interface UserInter {
+  email: string ;
+  password: string ;
+  displayName?: string ;
+}

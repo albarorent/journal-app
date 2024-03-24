@@ -1,18 +1,23 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { FormState, FormValidationState } from "../interface/Interfaces";
-
-
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { FormCheckedValues, FormState, FormValidationState } from "../interface/Interfaces";
 
 export const useForm = (
   initialForm: FormState = {},
   formValidations: FormValidationState = {}
 ) => {
   const [formState, setFormState] = useState(initialForm);
-  const [formValidation, setFormValidation] = useState({});
+  const [formValidation, setFormValidation] = useState<FormCheckedValues>({});
 
   useEffect(() => {
     createValidators();
   }, [formState]);
+
+  const isFormValid = useMemo(() => {
+    for (const formValue of Object.keys(formValidation)) {
+      if (formValidation[formValue] !== null) return false;
+    }
+    return true;
+  }, [formValidation]);
 
   const onInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = target;
@@ -27,7 +32,7 @@ export const useForm = (
   };
 
   const createValidators = () => {
-    const formCheckedValues: { [key: string]: string | null } = {};
+    const formCheckedValues:FormCheckedValues = {};
 
     for (const formField of Object.keys(formValidations)) {
       const [fn, errorMessage] = formValidations[formField];
@@ -45,5 +50,6 @@ export const useForm = (
     onInputChange,
     onResetForm,
     formValidation,
+    isFormValid
   };
 };
