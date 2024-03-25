@@ -8,6 +8,7 @@ import { useAppDispatch } from "../../hooks/useDispatch";
 import { starCreatingUserWithEmailPassword } from "../../store/auth";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import 'animate.css/animate.min.css';
 
 const formData = {
   email: "",
@@ -61,7 +62,7 @@ export const Register = () => {
   return (
     <AuthLayout title="Crear cuenta">
       {/* <h1>FormValid: {isFormValid ? 'Valido' : 'Incorrecto'}</h1> */}
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className="animate__animated animate__bounce">
         <Grid container>
           <Grid item xs={12}>
             <TextField
@@ -73,7 +74,7 @@ export const Register = () => {
               value={displayName}
               onChange={onInputChange}
               error={!!displayNameValid && formSubmit}
-              helperText={displayNameValid}
+              helperText={formSubmit && displayNameValid}
             />
           </Grid>
           <Grid item xs={12} sx={{ mt: 2 }}>
@@ -86,7 +87,9 @@ export const Register = () => {
               value={email}
               onChange={onInputChange}
               error={!!emailValid && formSubmit}
-              helperText={emailValid}
+              helperText={formSubmit && emailValid}
+              autoComplete="current-email"
+
             />
           </Grid>
           <Grid item xs={12} sx={{ mt: 2 }}>
@@ -99,7 +102,8 @@ export const Register = () => {
               value={password}
               onChange={onInputChange}
               error={!!passwordValid && formSubmit}
-              helperText={passwordValid}
+              helperText={formSubmit && passwordValid }
+              autoComplete="current-password"
             />
           </Grid>
           <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>

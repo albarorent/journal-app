@@ -46,7 +46,10 @@ export const Login = () => {
 
   return (
     <AuthLayout title="Login">
-      <form onSubmit={onSubmit}>
+      <form
+        onSubmit={onSubmit}
+        className="animate__animated animate__bounce"
+      >
         <Grid container>
           <Grid item xs={12}>
             <TextField
@@ -57,6 +60,7 @@ export const Login = () => {
               name="email"
               value={email}
               onChange={onInputChange}
+              autoComplete="current-email"
             />
           </Grid>
           <Grid item xs={12} sx={{ mt: 2 }}>
@@ -68,6 +72,7 @@ export const Login = () => {
               name="password"
               value={password}
               onChange={onInputChange}
+              autoComplete="current-password"
             />
           </Grid>
           <Grid container display={!!errorMessage ? "" : "none"} sx={{ mt: 1 }}>
