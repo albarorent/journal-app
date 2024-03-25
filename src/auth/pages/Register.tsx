@@ -8,7 +8,6 @@ import { useAppDispatch } from "../../hooks/useDispatch";
 import { starCreatingUserWithEmailPassword } from "../../store/auth";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import 'animate.css/animate.min.css';
 
 const formData = {
   email: "",
