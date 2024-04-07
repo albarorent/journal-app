@@ -21,8 +21,8 @@ import { useAppDispatch } from "../../hooks/useDispatch";
 import { RootState } from "../../store";
 
 const formData = {
-  email: "",
-  password: "",
+  email: "admin@gmail.com",
+  password: "123456",
 }
 
 export const Login = () => {
