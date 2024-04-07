@@ -6,10 +6,9 @@ import {
 } from "../../firebase/providers";
 import { UserInter } from "../../interface/Interfaces";
 import { clearNotesLogout } from "../journal";
-import { AppDispatch } from "../store";
 import { checkingCredentials, login, logout } from "./";
 
-export const checkingAuthentication = (email: string, password: string) => {
+export const checkingAuthentication = () => {
   return async (dispatch: any) => {
     dispatch(checkingCredentials());
   };
