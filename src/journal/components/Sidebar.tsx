@@ -1,22 +1,28 @@
-import { TurnedInNot } from "@mui/icons-material";
 import {
   Box,
   Divider,
   Drawer,
-  Grid,
+  IconButton,
   List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { useAppSelector } from "../../hooks/useDispatch";
+import { SideBardItem } from "./";
+import { MenuOutlined } from "@mui/icons-material";
 
-export const Sidebar = ({ drawerWidth = 240 }) => {
-  const { displayName } = useSelector((state: RootState) => state.auth);
+export const Sidebar = ({
+  drawerWidth = 240,
+  show,
+  showNavbar
+}: {
+  drawerWidth: number;
+  show: boolean;
+  showNavbar:()=>void
+}) => {
+  const { displayName } = useAppSelector((state: RootState) => state.auth);
+  const { notes } = useAppSelector((state: RootState) => state.journal);
 
   return (
     <Box
@@ -27,29 +33,28 @@ export const Sidebar = ({ drawerWidth = 240 }) => {
         variant="permanent"
         open
         sx={{
-          display: { xs: "block" },
+          display: { xs: show ? "block" : "none", sm: "block" },
           "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
         }}
       >
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
+            <IconButton
+              color="inherit"
+              edge="start"
+              sx={{ mr: 2, display: { sm: "none" } }}
+              onClick={showNavbar}
+            >
+              <MenuOutlined />
+            </IconButton>
             {displayName}
           </Typography>
         </Toolbar>
+
         <Divider />
         <List>
-          {["Enero", "Febrero", "Marzo", "Abril"].map((text) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <TurnedInNot />
-                </ListItemIcon>
-                <Grid container>
-                  <ListItemText primary={text} />
-                  <ListItemText secondary={"loren adasd oqwejoq  asdasd"} />
-                </Grid>
-              </ListItemButton>
-            </ListItem>
+          {notes.map((note) => (
+            <SideBardItem key={note.id} {...note} />
           ))}
         </List>
       </Drawer>

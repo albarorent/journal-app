@@ -1,8 +1,11 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { FormCheckedValues, FormState, FormValidationState } from "../interface/Interfaces";
+import {
+  FormCheckedValues,
+  FormValidationState,
+} from "../interface/Interfaces";
 
 export const useForm = (
-  initialForm: FormState = {},
+  initialForm: any = {},
   formValidations: FormValidationState = {}
 ) => {
   const [formState, setFormState] = useState(initialForm);
@@ -11,6 +14,10 @@ export const useForm = (
   useEffect(() => {
     createValidators();
   }, [formState]);
+
+  useEffect(() => {
+    setFormState(initialForm);
+  }, [initialForm]);
 
   const isFormValid = useMemo(() => {
     for (const formValue of Object.keys(formValidation)) {
@@ -32,7 +39,7 @@ export const useForm = (
   };
 
   const createValidators = () => {
-    const formCheckedValues:FormCheckedValues = {};
+    const formCheckedValues: FormCheckedValues = {};
 
     for (const formField of Object.keys(formValidations)) {
       const [fn, errorMessage] = formValidations[formField];
@@ -50,6 +57,6 @@ export const useForm = (
     onInputChange,
     onResetForm,
     formValidation,
-    isFormValid
+    isFormValid,
   };
 };

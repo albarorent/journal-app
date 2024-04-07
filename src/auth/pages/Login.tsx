@@ -20,16 +20,18 @@ import {
 import { useAppDispatch } from "../../hooks/useDispatch";
 import { RootState } from "../../store";
 
+const formData = {
+  email: "",
+  password: "",
+}
+
 export const Login = () => {
   const { status, errorMessage } = useSelector(
     (state: RootState) => state.auth
   );
   const dispatch = useAppDispatch();
 
-  const { formState, onInputChange } = useForm({
-    email: "",
-    password: "",
-  });
+  const { formState, onInputChange } = useForm(formData);
 
   const { email, password } = formState;
 

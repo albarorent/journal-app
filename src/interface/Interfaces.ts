@@ -7,9 +7,6 @@ export interface FormValidationState {
   [key: string]: [(value: string) => boolean, string];
 }
 
-export interface FormState {
-  [key: string]: string;
-}
 
 export interface FormCheckedValues {
   [key: string]: string | null;

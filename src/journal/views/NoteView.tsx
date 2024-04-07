@@ -1,8 +1,62 @@
-import { SaveOutlined } from "@mui/icons-material";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { DeleteOutline, SaveOutlined, UploadOutlined } from "@mui/icons-material";
+import { Button, Grid, IconButton, TextField, Typography } from "@mui/material";
 import { ImageGallery } from "../components";
+import { useForm } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/useDispatch";
+import { useEffect, useMemo, useRef } from "react";
+import { setActiveNote } from "../../store/journal";
+import { startDeletingNote, startSaveNote, startUploadingFiles } from "../../store/journal/thunks";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.css";
 
 export const NoteView = () => {
+  const {
+    active: note,
+    messageSaved,
+    isSaving,
+  } = useAppSelector((state) => state.journal);
+  const dispatch = useAppDispatch();
+  const { onInputChange, formState } = useForm(note);
+  const { title, body, date } = formState;
+
+  const dateString = useMemo(() => {
+    const { day, month, year } = date;
+    return {
+      day,
+      month,
+      year,
+    };
+  }, [date]);
+
+  const fileInputRef = useRef<any>();
+
+  useEffect(() => {
+    dispatch(setActiveNote(formState));
+  }, [formState]);
+
+  useEffect(() => {
+    if (messageSaved && messageSaved?.length > 0) {
+      Swal.fire("Nota actualizada", messageSaved, "success");
+    }
+  }, [messageSaved]);
+
+  const onSaveNote = () => {
+    dispatch(startSaveNote());
+  };
+
+  const onFileInputChange = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    if (target.files?.length === 0) return;
+    if (target.files) {
+      dispatch(startUploadingFiles(target.files));
+    }
+  };
+
+  const onDelete = () => {
+    dispatch(startDeletingNote());
+  }
+  
   return (
     <Grid
       container
@@ -14,11 +68,30 @@ export const NoteView = () => {
     >
       <Grid item>
         <Typography fontSize={39} fontWeight="light">
-          17 de marzo de 2024
+          {`${dateString.day}/${dateString.month}/${dateString.year}`}
         </Typography>
       </Grid>
       <Grid item>
-        <Button color="primary" sx={{ padding: 2 }}>
+        <input
+          type="file"
+          multiple
+          ref={fileInputRef}
+          onChange={onFileInputChange}
+          style={{ display: "none" }}
+        />
+        <IconButton
+          color="primary"
+          disabled={!!isSaving}
+          onClick={() => fileInputRef.current.click()}
+        >
+          <UploadOutlined />
+        </IconButton>
+        <Button
+          disabled={!!isSaving}
+          color="primary"
+          sx={{ padding: 2 }}
+          onClick={onSaveNote}
+        >
           <SaveOutlined sx={{ fontSize: 30, mr: 1 }} />
           Guardar
         </Button>
@@ -31,6 +104,9 @@ export const NoteView = () => {
           placeholder="Ingrese un titulo"
           label="Título"
           sx={{ border: "none", mb: 1 }}
+          name="title"
+          value={title}
+          onChange={onInputChange}
         />
         <TextField
           type="text"
@@ -40,10 +116,18 @@ export const NoteView = () => {
           placeholder="¿Qué sucedio hoy?"
           label="Descripción"
           minRows={5}
+          name="body"
+          value={body}
+          onChange={onInputChange}
         />
       </Grid>
+      <Grid container justifyContent="end">
+          <Button onClick={onDelete} sx={{mt:2}} color="error">
+              <DeleteOutline/>
+          </Button>
+      </Grid>
       {/* Image Gallery */}
-      <ImageGallery/>
+      <ImageGallery images={note && note.imagesUrls ? note.imagesUrls : []}/>
     </Grid>
   );
 };
