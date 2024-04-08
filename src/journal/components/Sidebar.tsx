@@ -28,7 +28,6 @@ export const Sidebar = ({
     <Box
       component="nav"
       sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      className="animate__animated animate__backOutLeft"
     >
       <Drawer
         variant="permanent"
